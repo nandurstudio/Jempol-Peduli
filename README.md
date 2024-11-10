@@ -3,6 +3,15 @@
 
 **JempolPeduli** is a mobile application developed to facilitate food and clothing donations, enabling users to give and receive aid with ease. Aiming to enhance social awareness, this app leverages technology to streamline the donation process.
 
+---
+
+### TL;DR
+
+1. 📌 [**Functional Specification Document (FSD) - Aplikasi JempolPeduli by Nandang Duryat in Bahasa Indonesia**](https://www.canva.com/design/DAGUWv-vQCU/i3fE7qJU4Lg5P46u2H_o6A/view?utm_content=DAGUWv-vQCU&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+2. 📃 [**FULL Storyboard, Mockup & UI of JempolPeduli - Storyboard & Design Overview**](https://www.canva.com/design/DAGUXOJLveQ/SN9FcryzuIT1bteUoQDNnQ/view?utm_content=DAGUXOJLveQ&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+
+---
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Philosophy](#philosophy)
