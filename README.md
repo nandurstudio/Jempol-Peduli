@@ -72,27 +72,68 @@ In response to social disparities, *JempolPeduli* is intended to eliminate barri
   - Recipients receiving aid
 
 ### User Interface Details
-- **Primary Button**: Bright Green background with white text for main actions.
-  - Examples: "Donate Now," "Submit Request."
-- **Bottom Navigation** for easy access to main features, including:
-  - Home
-  - Donations
+
+- **Primary Button**:  
+  Bright green background with white text for main actions.  
+  Examples: "Donate Now," "Submit Request."
+
+- **Bottom Navigation**:  
+  Provides easy access to main features, including:  
+  - Home  
+  - Donations  
   - Profile
-- **Spacing**: Margin and padding ensure organized, accessible content.
-  - **Margin**: 8dp between elements
+
+- **Spacing**:  
+  Ensures organized and accessible content.  
+  - **Margin**: 8dp between elements  
   - **Padding**: 16dp around main content
-- **App Flow**: Key interface elements include:
-  - **Splash Screen**: Brand introduction (2-3 seconds)
-  - **Onboarding Screens**: Brief tutorial on app features.
-  - **Login/Sign-Up Screen**: Email, Google, or Facebook options.
-  - **Home Screen**: Displays urgent needs or donation offers by location or urgency.
-  - **Donation Screen**: Form for type, quantity, and condition of items, along with location input.
-  - **Recipient Screen**: Form for needs request, including type, quantity, and location.
-  - **Transaction History**: Shows donation and reception history with status.
-  - **Profile**: User information, transaction history, and account settings.
+
+---
+
+### App Flow
+
+Key interface elements include:
+
+1. **Splash Screen**:  
+   Brand introduction (2-3 seconds)  
+   ![Splash Screen](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli.png)
+
+2. **Onboarding Screens**:  
+   Brief tutorial on app features  
+   ![Onboarding Screen 1](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(1).png)
+
+3. **Login/Sign-Up Screen**:  
+   Options to log in via email, Google, or Facebook  
+   | ![Login Screen 1](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(2).png) | ![Login Screen 2](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(3).png) |
+   |---|---|
+
+4. **Home Screen**:  
+   Displays urgent needs or donation offers by location or urgency  
+   | ![Home Screen 1](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(4).png) | ![Home Screen 2](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(9).png) |
+   |---|---|
+
+5. **Donation Screen**:  
+   Form for type, quantity, and condition of items, along with location input  
+   ![Donation Screen](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(5).png)
+
+6. **Recipient Screen**:  
+   Form for needs requests, including type, quantity, and location  
+   ![Recipient Screen](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(6).png)
+
+7. **Transaction History**:  
+   Displays donation and reception history with status  
+   | ![Transaction History 1](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(8).png) | ![Transaction History 2](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(4).png) |
+   |---|---|
+
+8. **Profile**:  
+   User information, transaction history, and account settings  
+   ![Profile Screen](https://github.com/nandurstudio/Jempol-Peduli/raw/master/UI_concept/ui_concept_JempolPeduli%20(7).png)
+
+---
 
 ### Conclusion
-The JempolPeduli application is designed to simplify the donation process, raise social awareness, and use technology to create a positive community impact. With a responsive and intuitive interface, it is expected to reach a broad user base and offer assistance to those in need.
+
+The **JempolPeduli** application is designed to simplify the donation process, raise social awareness, and use technology to create a positive community impact. With a responsive and intuitive interface, it is expected to reach a broad user base and offer assistance to those in need.
 
 ---
 
