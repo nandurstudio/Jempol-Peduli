@@ -1,61 +1,125 @@
+@file:Suppress("DEPRECATION")
+
 package com.nandurstudio.jempolpeduli.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.nandurstudio.jempolpeduli.MainActivity
 import com.nandurstudio.jempolpeduli.R
 import com.nandurstudio.jempolpeduli.databinding.ActivityLoginBinding
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
-import java.security.MessageDigest
-import java.util.UUID
 
 class LoginActivity : AppCompatActivity() {
     private var loginViewModel: LoginViewModel? = null
     private var binding: ActivityLoginBinding? = null
 
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
+
+    // [START declare_auth]
+    private lateinit var auth: FirebaseAuth
+    // [END declare_auth]
+
+    companion object {
+        private const val TAG = "GoogleActivity"
+        private const val RC_SIGN_IN = 9001
+    }
+
+    // [START on_start_check_user]
+    override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // Redirect langsung ke HomeFragment
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
+            startActivity(intent)
+            finish()
+        }
+    }
+    // [END on_start_check_user]
+
+    private fun updateUI() {
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(
-            layoutInflater
-        )
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        // Inisialisasi view model
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        // Inisialisasi Firebase Auth
+        auth = Firebase.auth
+
+        // Inisialisasi ViewModel
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
+
+        // Inisialisasi One Tap Client
+        oneTapClient = Identity.getSignInClient(this)
+        signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.your_web_client_id)) // Ganti dengan client ID Anda
+                    .setFilterByAuthorizedAccounts(false) // Atur sesuai kebutuhan
+                    .build()
+            )
+            .build()
 
         // Menggunakan binding untuk akses elemen UI
         val usernameEditText = binding!!.username
         val passwordEditText = binding!!.password
         val emailSignInButton = binding!!.emailSignInButton // Jika id emailSignInButton
-        val loadingProgressBar = binding!!.loading
+        val googleSignInButton = binding!!.googleSignInButton
         val eyeIcon = binding!!.eyeIcon
+        val loadingProgressBar = binding!!.loadingProgressBar
+
+        googleSignInButton!!.setOnClickListener {
+
+            // Tampilkan loading
+            loadingProgressBar!!.visibility = View.VISIBLE
+            // Set up Google Sign-In options
+            // [START config_signin]
+            // Configure Google Sign In
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+
+            googleSignInClient = GoogleSignIn.getClient(this, gso)
+            // [END config_signin]
+
+            // [START initialize_auth]
+            // Initialize Firebase Auth
+            auth = Firebase.auth
+            // [END initialize_auth]
+
+            // Start Google Sign-In Intent
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
 
         loginViewModel!!.loginFormState.observe(this) { loginFormState: LoginFormState? ->
             if (loginFormState == null) {
@@ -74,7 +138,7 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult == null) {
                 return@observe
             }
-            loadingProgressBar.visibility = View.GONE
+            loadingProgressBar!!.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
@@ -118,11 +182,22 @@ class LoginActivity : AppCompatActivity() {
         }
 
         emailSignInButton!!.setOnClickListener { v: View? ->
-            loadingProgressBar.visibility = View.VISIBLE
+            loadingProgressBar!!.visibility = View.VISIBLE
             loginViewModel!!.login(
                 usernameEditText.text.toString(),
                 passwordEditText.text.toString()
             )
+
+            // Redirect jika login berhasil
+            loginViewModel!!.loginResult.observe(this) { loginResult: LoginResult? ->
+                loadingProgressBar.visibility = View.GONE // Sembunyikan loading
+                if (loginResult?.success != null) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
+                    startActivity(intent)
+                    finish()
+                }
+            }
         }
     }
 
@@ -135,74 +210,47 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString!!, Toast.LENGTH_SHORT).show()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    // [START onactivityresult]
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-    }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-
-            // Login berhasil, proses akun
-            updateUiWithUser(LoggedInUserView(account.displayName))
-        } catch (e: ApiException) {
-            showLoginFailed(R.string.login_failed) // Menampilkan pesan gagal
-        }
-    }
-
-    private suspend fun googleSignIn(context: Context): Flow<Result<AuthResult>> {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        return callbackFlow {
             try {
-                // Initialize Credential Manager
-                val credentialManager: CredentialManager = CredentialManager.create(context)
-
-                // Generate a nonce (a random number used once)
-                val ranNonce: String = UUID.randomUUID().toString()
-                val bytes: ByteArray = ranNonce.toByteArray()
-                val md: MessageDigest = MessageDigest.getInstance("SHA-256")
-                val digest: ByteArray = md.digest(bytes)
-                val hashedNonce: String = digest.fold("") { str, it -> str + "%02x".format(it) }
-
-                // Set up Google ID option
-                val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId("YOUR_WEB_CLIENT_ID")
-                    .setNonce(hashedNonce)
-                    .build()
-
-                // Request credentials
-                val request: GetCredentialRequest = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-
-                // Get the credential result
-                val result = credentialManager.getCredential(context, request)
-                val credential = result.credential
-
-                // Check if the received credential is a valid Google ID Token
-                if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    val googleIdTokenCredential =
-                        GoogleIdTokenCredential.createFrom(credential.data)
-                    val authCredential =
-                        GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
-                    val authResult = firebaseAuth.signInWithCredential(authCredential).await()
-                    trySend(Result.success(authResult))
-                } else {
-                    throw RuntimeException("Received an invalid credential type")
-                }
-            } catch (e: GetCredentialCancellationException) {
-                trySend(Result.failure(Exception("Sign-in was canceled. Please try again.")))
-
-            } catch (e: Exception) {
-                trySend(Result.failure(e))
+                // Google Sign In berhasil, autentikasi dengan Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                binding?.loadingProgressBar?.visibility = View.VISIBLE // Tampilkan loading
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                // Google Sign In gagal
+                binding?.loadingProgressBar?.visibility = View.GONE // Sembunyikan loading
+                Log.w(TAG, "Google sign in failed", e)
             }
-            awaitClose { }
         }
     }
+    // [END onactivityresult]
+
+    // [START auth_with_google]
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        binding?.loadingProgressBar?.visibility = View.VISIBLE // Tampilkan loading
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                binding?.loadingProgressBar?.visibility = View.GONE // Sembunyikan loading
+                if (task.isSuccessful) {
+                    // Berhasil masuk
+                    Log.d(TAG, "signInWithCredential:success")
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Gagal masuk
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    updateUI()
+                }
+            }
+    }
+    // [END auth_with_google]
 }

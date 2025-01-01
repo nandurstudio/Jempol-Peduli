@@ -35,8 +35,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    // Sinkronisasi target JVM Kotlin dengan Java
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 }
 
@@ -50,7 +51,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.annotation)
-    implementation(libs.core.ktx)
+    implementation ("androidx.core:core-ktx:1.13.1")
+    implementation(libs.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -59,17 +61,23 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
+
+    
     //Firebase
-    implementation(libs.firebase.auth.ktx)
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth")
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     //Android Credential
-    implementation(libs.play.services.auth)
     implementation(libs.credentials.v130beta02)
 
     //Viewmodel
     implementation(libs.lifecycle.viewmodel.compose)
-    // Import the Firebase BoM
-    implementation(platform(libs.firebase.bom.v3351))
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
 
@@ -81,4 +89,5 @@ dependencies {
     // For example, add the dependencies for Firebase Authentication and Cloud Firestore
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.googleid)
 }

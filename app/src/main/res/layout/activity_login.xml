@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Login"
+                android:text="@string/login"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -50,7 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:hint="Email"
+                android:autofillHints="Username"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:minHeight="48dp"
                 android:selectAllOnFocus="true" />
@@ -65,11 +66,13 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:autofillHints="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:minHeight="48dp"
                     android:paddingEnd="48dp"
-                    android:selectAllOnFocus="true" />
+                    android:selectAllOnFocus="true"
+                    tools:ignore="RtlSymmetry" />
 
                 <!-- Eye icon to toggle password visibility -->
                 <ImageView
@@ -87,7 +90,7 @@
                 android:id="@+id/emailSignInButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign in with Email"
+                android:text="@string/sign_in_with_email"
                 android:textAlignment="center"
                 app:icon="@drawable/mail_24px"
                 app:iconGravity="textStart"
@@ -112,8 +115,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="OR"
-                    android:textColor="@android:color/darker_gray" />
+                    android:text="@string/or"
+                    android:textColor="#757575" />
 
                 <View
                     android:layout_width="0dp"
@@ -123,11 +126,11 @@
             </LinearLayout>
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
+                android:id="@+id/googleSignInButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Sign in with Google" />
+                android:text="@string/sign_in_with_google" />
 
 
             <TextView
@@ -137,16 +140,17 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
-                android:text="Lupa Password?"
+                android:minHeight="48dp"
+                android:text="@string/forgot_password"
                 android:textColor="@color/md_theme_primary" />
 
             <ProgressBar
-                android:id="@+id/loading"
+                android:id="@+id/loading_progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

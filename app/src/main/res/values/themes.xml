@@ -11,6 +11,22 @@
         <item name="windowSplashScreenAnimationDuration">1000</item>
     </style>
 
+    <!-- SettingsContainer Theme -->
+    <style name="Theme.JempolPeduli.WithAppBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Warna status bar -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <!-- Warna navigasi -->
+        <item name="android:navigationBarColor">@color/md_theme_surface</item>
+
+        <!-- Tambahkan action bar -->
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+
+        <!-- Warna dan elemen AppBar -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Theme.JempolPeduli.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color -->
