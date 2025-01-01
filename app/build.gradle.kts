@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
 }
 
 android {
@@ -87,4 +88,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.googleid)
+    implementation(libs.glide)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.compiler)
 }

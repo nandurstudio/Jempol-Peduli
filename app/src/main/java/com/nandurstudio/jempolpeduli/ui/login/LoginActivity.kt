@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId(getString(R.string.your_web_client_id)) // Ganti dengan client ID Anda
+                    .setServerClientId(getString(R.string.your_web_client_id))
                     .setFilterByAuthorizedAccounts(false) // Atur sesuai kebutuhan
                     .build()
             )

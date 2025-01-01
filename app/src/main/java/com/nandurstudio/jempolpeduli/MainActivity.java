@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -15,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.splashscreen.SplashScreen;
 import android.content.Intent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.nandurstudio.jempolpeduli.databinding.ActivityMainBinding;
@@ -32,16 +39,6 @@ public class MainActivity extends AppCompatActivity {
         // Pasang splash screen
         SplashScreen.installSplashScreen(this);
 
-        // Periksa apakah pengguna sudah login
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // Pengguna belum login, alihkan ke LoginActivity
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Hapus backstack
-            startActivity(loginIntent);
-            finish(); // Tutup MainActivity
-            return;
-        }
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -53,6 +50,42 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+        View headerView = navigationView.getHeaderView(0); // Ambil header dari NavigationView
+
+        ImageView profileImageView = headerView.findViewById(R.id.profileImageView);
+        TextView profileNameTextView = headerView.findViewById(R.id.profileNameTextView);
+        TextView profileEmailTextView = headerView.findViewById(R.id.profileEmailTextView);
+
+        // Periksa apakah pengguna sudah login
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            // Pengguna belum login, alihkan ke LoginActivity
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Hapus backstack
+            startActivity(loginIntent);
+            finish(); // Tutup MainActivity
+            return;
+        }
+
+        // Tambahkan di sini setelah pengguna dipastikan sudah login
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            String name = account.getDisplayName(); // Nama pengguna
+            String email = account.getEmail();     // Email pengguna
+            String photoUrl = (account.getPhotoUrl() != null) ? account.getPhotoUrl().toString() : null; // URL foto profil
+
+            // Set nama dan email ke TextView
+            profileNameTextView.setText(name);
+            profileEmailTextView.setText(email);
+
+            // Set foto profil ke ImageView
+            if (photoUrl != null) {
+                Glide.with(this)
+                        .load(photoUrl)
+                        .circleCrop() // Untuk membuat gambar menjadi lingkaran
+                        .into(profileImageView);
+            }
+        }
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -87,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_logout) {
             // Logout dari Firebase
             FirebaseAuth.getInstance().signOut();
+            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
 
             // Redirect ke LoginActivity
             Intent intent = new Intent(this, LoginActivity.class);
