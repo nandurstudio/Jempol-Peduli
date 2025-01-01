@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
         // Menggunakan binding untuk akses elemen UI
         val usernameEditText = binding!!.username
         val passwordEditText = binding!!.password
-        val emailSignInButton = binding!!.emailSignInButton // Jika id emailSignInButton
+        val emailSignInButton = binding!!.emailSignInButton
         val googleSignInButton = binding!!.googleSignInButton
         val eyeIcon = binding!!.eyeIcon
         val loadingProgressBar = binding!!.loadingProgressBar
