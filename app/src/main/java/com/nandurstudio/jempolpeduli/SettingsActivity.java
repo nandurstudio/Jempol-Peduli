@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceFragmentCompat;
@@ -30,20 +29,21 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.settings_container, new SettingsFragment())
                 .commit();
+
+        // Tambahkan OnBackPressedCallback
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish(); // Tutup aktivitas atau tambahkan logika lainnya
+            }
+        });
     }
 
     // Tangani klik tombol back
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Tangani aksi back
-            OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
-            onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    finish(); // Atau aksi lain
-                }
-            });
+            getOnBackPressedDispatcher().onBackPressed(); // Memanggil dispatcher untuk tombol back
             return true;
         }
         return super.onOptionsItemSelected(item);

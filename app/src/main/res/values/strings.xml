@@ -34,4 +34,8 @@
     <string name="password">Password</string>
     <string name="sign_in_with_email">Sign in with Email</string>
     <string name="or">OR</string>
+    <string name="menu_donation">Donation</string>
+    <string name="menu_profile">Profile</string>
+    <string name="fragment_campaign">Campaign</string>
+    <string name="fragment_inbox">Inbox\n</string>
 </resources>

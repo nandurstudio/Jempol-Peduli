@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.nandurstudio.jempolpeduli.databinding.ActivityMainBinding;
@@ -57,6 +59,27 @@ public class MainActivity extends AppCompatActivity {
         TextView profileNameTextView = headerView.findViewById(R.id.profileNameTextView);
         TextView profileEmailTextView = headerView.findViewById(R.id.profileEmailTextView);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                Toast.makeText(this, "Item 1 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (item.getItemId() == R.id.nav_donation) {
+                Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (item.getItemId() == R.id.nav_profile) {
+                Toast.makeText(this, "Item 3 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (item.getItemId() == R.id.nav_inbox) {
+                Toast.makeText(this, "Item 4 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (item.getItemId() == R.id.nav_campaign) {
+                Toast.makeText(this, "Item 5 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
+
         // Periksa apakah pengguna sudah login
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Pengguna belum login, alihkan ke LoginActivity
@@ -90,13 +113,15 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_donation, R.id.nav_profile, R.id.nav_inbox, R.id.nav_campaign)
                 .setOpenableLayout(drawer)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        // Hubungkan BottomNavigationView dengan NavController
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
     @Override

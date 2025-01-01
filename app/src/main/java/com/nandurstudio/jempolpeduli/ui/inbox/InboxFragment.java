@@ -1,4 +1,4 @@
-package com.nandurstudio.jempolpeduli.ui.slideshow;
+package com.nandurstudio.jempolpeduli.ui.inbox;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.nandurstudio.jempolpeduli.databinding.FragmentSlideshowBinding;
+import com.nandurstudio.jempolpeduli.databinding.FragmentInboxBinding;
 
-public class SlideshowFragment extends Fragment {
+public class InboxFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentInboxBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        InboxViewModel inboxViewModel =
+                new ViewModelProvider(this).get(InboxViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentInboxBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textInbox;
+        inboxViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

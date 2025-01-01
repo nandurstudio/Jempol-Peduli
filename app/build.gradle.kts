@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.annotation)
     implementation (libs.core.ktx)
     implementation(libs.preference)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
