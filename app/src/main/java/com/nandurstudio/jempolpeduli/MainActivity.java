@@ -13,7 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.core.splashscreen.SplashScreen; // Tambahkan import ini
+import androidx.core.splashscreen.SplashScreen;
 import android.content.Intent;
 
 import com.google.firebase.auth.FirebaseAuth;
