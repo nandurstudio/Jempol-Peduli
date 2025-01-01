@@ -2,6 +2,9 @@ package com.nandurstudio.jempolpeduli;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceFragmentCompat;
@@ -33,7 +36,14 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed(); // Tutup activity saat back arrow ditekan
+            // Tangani aksi back
+            OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
+            onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    finish(); // Atau aksi lain
+                }
+            });
             return true;
         }
         return super.onOptionsItemSelected(item);
