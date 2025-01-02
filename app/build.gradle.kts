@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.legacy.support.v4)
     implementation(libs.recyclerview)
+    implementation(libs.viewpager2)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -93,4 +94,10 @@ dependencies {
     implementation(libs.glide)
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.compiler)
+    implementation(libs.viewpager2)
+}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

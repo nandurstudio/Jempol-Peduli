@@ -52,19 +52,24 @@ public class CampaignFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_campaign_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            CustomRecyclerView recyclerView = view.findViewById(R.id.campaign);
+
+
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
+            // Tambahkan separator
+            recyclerView.addItemDecoration(new CustomDividerItemDecoration(context, 32)); // 32dp padding
+
             recyclerView.setAdapter(new CampaignRecyclerViewAdapter(PlaceholderContent.ITEMS));
         }
         return view;

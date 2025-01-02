@@ -57,11 +57,13 @@ public class PlaceholderContent {
         public final String id;
         public final String content;
         public final String details;
+        public final String imageUrl;
 
         public PlaceholderItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
+            this.imageUrl = details;
         }
 
         @Override

@@ -38,4 +38,5 @@
     <string name="menu_profile">Profile</string>
     <string name="fragment_campaign">Campaign</string>
     <string name="fragment_inbox">Inbox\n</string>
+    <string name="image_desc">image_desc</string>
 </resources>

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nandurstudio.jempolpeduli.ui.campaign.CustomRecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/campaign"
     android:name="com.nandurstudio.jempolpeduli.CampaignFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.campaign.CampaignFragment"
-    tools:listitem="@layout/fragment_campaign" />
+    tools:listitem="@layout/fragment_campaign"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
+    android:scrollbarThumbVertical="@drawable/custom_scrollbar_thumb"
+    android:scrollbarTrackVertical="@drawable/custom_scrollbar_track" />
