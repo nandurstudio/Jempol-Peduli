@@ -39,4 +39,7 @@
     <string name="fragment_campaign">Campaign</string>
     <string name="fragment_inbox">Inbox\n</string>
     <string name="image_desc">image_desc</string>
+    <string name="profile_picture">profile_picture</string>
+    <string name="verified_badge">verified_badge</string>
+    <string name="button1">button1</string>
 </resources>

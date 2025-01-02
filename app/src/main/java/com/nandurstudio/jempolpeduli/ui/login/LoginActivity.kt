@@ -17,9 +17,13 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -54,7 +58,8 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser != null) {
             // Redirect langsung ke HomeFragment
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
             startActivity(intent)
             finish()
         }
@@ -74,7 +79,8 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         // Inisialisasi ViewModel
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
+        loginViewModel =
+            ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
 
         // Inisialisasi One Tap Client
         oneTapClient = Identity.getSignInClient(this)
@@ -103,10 +109,15 @@ class LoginActivity : AppCompatActivity() {
             // Set up Google Sign-In options
             // [START config_signin]
             // Configure Google Sign In
+
+            // Requesting additional scopes
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .build()
+                .requestProfile()
+                .requestId()
+                .requestScopes(Scope(Scopes.PLUS_LOGIN)) // Untuk akses lebih, seperti gender, birthday
+                .build();
 
             googleSignInClient = GoogleSignIn.getClient(this, gso)
             // [END config_signin]
@@ -193,7 +204,8 @@ class LoginActivity : AppCompatActivity() {
                 loadingProgressBar.visibility = View.GONE // Sembunyikan loading
                 if (loginResult?.success != null) {
                     val intent = Intent(this, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Hapus backstack
                     startActivity(intent)
                     finish()
                 }
@@ -222,6 +234,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 binding?.loadingProgressBar?.visibility = View.VISIBLE // Tampilkan loading
                 firebaseAuthWithGoogle(account.idToken!!)
+                handleSignInResult(task)
             } catch (e: ApiException) {
                 // Google Sign In gagal
                 binding?.loadingProgressBar?.visibility = View.GONE // Sembunyikan loading
@@ -230,6 +243,33 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     // [END onactivityresult]
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            // Google Sign-In was successful
+            val account = completedTask.getResult(ApiException::class.java)
+
+            // Fetch and log the basic profile data
+            val name = account?.displayName ?: "No Name"
+            val email = account?.email ?: "No Email"
+            val photoUrl = account?.photoUrl?.toString() ?: "No Photo"
+            val id = account?.id ?: "No ID"
+            val givenName = account?.givenName ?: "No Given Name"
+            val familyName = account?.familyName ?: "No Family Name"
+
+            // Log the fetched data
+            Log.d("GoogleLoginData", "Name: $name")
+            Log.d("GoogleLoginData", "Email: $email")
+            Log.d("GoogleLoginData", "Photo URL: $photoUrl")
+            Log.d("GoogleLoginData", "User ID: $id")
+            Log.d("GoogleLoginData", "Given Name: $givenName")
+            Log.d("GoogleLoginData", "Family Name: $familyName")
+
+        } catch (e: ApiException) {
+            // Handle failure
+            Log.w("GoogleLoginData", "signInResult:failed code=${e.statusCode}")
+        }
+    }
 
     // [START auth_with_google]
     private fun firebaseAuthWithGoogle(idToken: String) {

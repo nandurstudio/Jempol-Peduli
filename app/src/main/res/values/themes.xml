@@ -27,6 +27,12 @@
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
     </style>
 
+    <!-- Fullscreeb theme. -->
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Theme.JempolPeduli.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color -->

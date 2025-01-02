@@ -95,6 +95,7 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.compiler)
     implementation(libs.viewpager2)
+    implementation(libs.photoview)
 }
 java {
     toolchain {
