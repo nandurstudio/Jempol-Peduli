@@ -1,25 +1,41 @@
 package com.nandurstudio.jempolpeduli.ui.profile;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.SetOptions;
 import com.nandurstudio.jempolpeduli.R;
+import com.nandurstudio.jempolpeduli.data.model.LoggedInUser;
 import com.nandurstudio.jempolpeduli.databinding.FragmentProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
     private ProfileViewModel profileViewModel;
+
+    // Firebase Firestore instance
+    private FirebaseFirestore db;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -28,16 +44,34 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Get Firebase user data
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            //Set the Image dimension here it will not reduce the image pixels
-            String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString().replace("s96-c", "s492-c") : null;
+        db = FirebaseFirestore.getInstance();
+        if (db == null) {
+            Log.e(TAG, "FirebaseFirestore instance is null!");
+        }
 
-            // Update ViewModel with user data
-            profileViewModel.setUserData(name, email, photoUrl);
+        // Load user data
+        loadUserData();
+
+        // Get Firebase user data
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            String name = firebaseUser.getDisplayName();
+            String email = firebaseUser.getEmail();
+            String photoUrl = firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString().replace("s96-c", "s492-c") : null;
+
+            // Populate the LoggedInUser model
+            LoggedInUser user = new LoggedInUser(userId, name);
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("userId", user.getUserId());
+            userData.put("displayName", user.getDisplayName());
+            userData.put("email", email);
+            userData.put("photoUrl", photoUrl);
+
+            // Save to Firestore
+            saveUserData(userId, userData);
+        } else {
+            Toast.makeText(getContext(), "No user logged in", Toast.LENGTH_SHORT).show();
         }
 
         // Bind data to UI
@@ -71,7 +105,106 @@ public class ProfileFragment extends Fragment {
             binding.profileEmail.setText(email);
         });
 
+        // Save Button to update profile data
+        binding.saveButton.setOnClickListener(v -> {
+            saveProfileDataToFirestore(firebaseUser);
+        });
+
+        // Bind user input fields (address, phone, nickname) for editing
+        EditText profileAddress = binding.profileAddress;
+        EditText profilePhone = binding.profilePhone;
+        EditText profileNickname = binding.profileNickname;
+
+        // Update data in Firestore when editing fields
+        binding.saveButton.setOnClickListener(v -> {
+            String address = profileAddress.getText().toString();
+            String phone = profilePhone.getText().toString();
+            String nickname = profileNickname.getText().toString();
+
+            assert firebaseUser != null;
+            updateUserProfile(firebaseUser.getUid(), address, phone, nickname);
+        });
+
+        profileViewModel.getName().observe(getViewLifecycleOwner(), name -> binding.profileName.setText(name));
+        profileViewModel.getEmail().observe(getViewLifecycleOwner(), email -> binding.profileEmail.setText(email));
+
         return root;
+    }
+
+    private void loadUserData() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        String email = documentSnapshot.getString("email");
+                        String photoUrl = documentSnapshot.getString("photoUrl");
+
+                        // Update UI
+                        profileViewModel.setUserData(name, email, photoUrl);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to load user data", e));
+    }
+
+    private void saveUserData(String userId, Map<String, Object> userData) {
+        db.collection("users")
+                .document(userId)
+                .set(userData, SetOptions.merge()) // Create or update document
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "User profile created/updated successfully"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error creating/updating user profile", e));
+    }
+
+    private void saveProfileDataToFirestore(FirebaseUser user) {
+        if (user != null) {
+            String userId = user.getUid();
+            String name = profileViewModel.getName().getValue();
+            String email = profileViewModel.getEmail().getValue();
+            String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
+
+            // Prepare data to be saved in Firestore
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("name", name);
+            userData.put("email", email);
+            userData.put("photoUrl", photoUrl);
+
+            // Save user data to Firestore
+            DocumentReference userRef = db.collection("users").document(userId);
+            userRef.set(userData, SetOptions.merge())  // Use merge to only update specific fields
+                    .addOnSuccessListener(aVoid -> {
+                        // Success callback
+                        Log.d("ProfileFragment", "User profile updated successfully");
+                    })
+                    .addOnFailureListener(e -> {
+                        // Failure callback
+                        Log.w("ProfileFragment", "Error updating user profile", e);
+                    });
+        }
+    }
+
+    private void updateUserProfile(String userId, String address, String phone, String nickname) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        // Membuat Map untuk update data
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("address", address);
+        updates.put("phoneNumber", phone);
+        updates.put("nickname", nickname);
+
+        // Update data di Firestore
+        userRef.update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Tanggapan sukses
+                    Log.d("Firestore", "User profile updated successfully");
+                })
+                .addOnFailureListener(e -> {
+                    // Tangani kegagalan
+                    Log.e("Firestore", "Error updating user profile", e);
+                });
     }
 
     @Override

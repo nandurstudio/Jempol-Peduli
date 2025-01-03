@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nandurstudio.jempolpeduli.databinding.ActivityMainBinding;
 import com.nandurstudio.jempolpeduli.ui.campaign.CampaignFragment;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Pasang splash screen
         SplashScreen.installSplashScreen(this);
+
+        // Inisialisasi Firebase
+        FirebaseApp.initializeApp(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

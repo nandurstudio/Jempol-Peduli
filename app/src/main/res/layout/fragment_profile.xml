@@ -59,7 +59,7 @@
 
     <!-- Address -->
     <TextView
-        android:id="@+id/profile_address"
+        android:id="@+id/profile_address_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -105,6 +105,39 @@
             android:text="Received: 12"
             android:textSize="16sp"
             android:textColor="@android:color/white" />
+
+        <!-- Address EditText -->
+        <EditText
+            android:id="@+id/profile_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Address"
+            android:text="@={viewModel.userAddress}" />
+
+        <!-- Phone number EditText -->
+        <EditText
+            android:id="@+id/profile_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Phone Number"
+            android:text="@={viewModel.userPhoneNumber}" />
+
+        <!-- Nickname EditText -->
+        <EditText
+            android:id="@+id/profile_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Nickname"
+            android:text="@={viewModel.userNickname}" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
 
     <!-- Action Buttons -->
