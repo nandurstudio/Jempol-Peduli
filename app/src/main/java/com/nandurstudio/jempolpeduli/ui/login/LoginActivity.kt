@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.nandurstudio.jempolpeduli.BuildConfig
 import com.nandurstudio.jempolpeduli.MainActivity
 import com.nandurstudio.jempolpeduli.R
 import com.nandurstudio.jempolpeduli.databinding.ActivityLoginBinding
@@ -75,6 +76,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
+        // Set app version text dynamically
+        val versionName = BuildConfig.VERSION_NAME
+        val versionCode = BuildConfig.VERSION_CODE
+        binding!!.appVersionText?.text = "Version $versionName ($versionCode)"
+
         // Inisialisasi Firebase Auth
         auth = Firebase.auth
 
@@ -117,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
                 .requestProfile()
                 .requestId()
                 .requestScopes(Scope(Scopes.PLUS_LOGIN)) // Untuk akses lebih, seperti gender, birthday
-                .build();
+                .build()
 
             googleSignInClient = GoogleSignIn.getClient(this, gso)
             // [END config_signin]

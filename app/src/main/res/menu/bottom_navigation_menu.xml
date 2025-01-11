@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_eye"
+        android:icon="@drawable/_9_ribbon"
         android:title="Home" />
 
     <item
         android:id="@+id/nav_donation"
-        android:icon="@drawable/ic_eye"
+        android:icon="@drawable/_1_donation"
         android:title="Donation" />
 
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_eye"
+        android:icon="@drawable/_3_happy"
         android:title="Profile" />
 
     <item
         android:id="@+id/nav_inbox"
-        android:icon="@drawable/ic_eye"
+        android:icon="@drawable/_2_thank_you_card"
         android:title="Inbox" />
 
     <item
         android:id="@+id/nav_campaign"
-        android:icon="@drawable/ic_eye"
+        android:icon="@drawable/_3_love"
         android:title="Campaign" />
 </menu>

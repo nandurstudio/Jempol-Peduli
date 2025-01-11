@@ -1,5 +1,7 @@
 package com.nandurstudio.jempolpeduli.placeholder;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +68,7 @@ public class PlaceholderContent {
             this.imageUrl = details;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return content;

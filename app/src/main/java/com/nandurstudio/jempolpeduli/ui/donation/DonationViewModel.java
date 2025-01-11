@@ -4,16 +4,28 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 public class DonationViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<QuerySnapshot> donationsLiveData;
+    private final CollectionReference donationRef;
 
     public DonationViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is donation fragment");
+        donationsLiveData = new MutableLiveData<>();
+        donationRef = FirebaseFirestore.getInstance().collection("donations");
+        loadDonations();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    private void loadDonations() {
+        donationRef.whereEqualTo("isActive", true).get()
+                .addOnSuccessListener(donationsLiveData::setValue)
+                .addOnFailureListener(e -> donationsLiveData.setValue(null));
+    }
+
+    public LiveData<QuerySnapshot> getDonations() {
+        return donationsLiveData;
     }
 }

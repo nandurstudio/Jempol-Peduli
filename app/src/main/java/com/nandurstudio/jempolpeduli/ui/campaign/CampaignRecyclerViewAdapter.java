@@ -28,8 +28,9 @@ public class CampaignRecyclerViewAdapter extends RecyclerView.Adapter<CampaignRe
         mValues = items;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         return new ViewHolder(FragmentCampaignBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
@@ -64,7 +65,7 @@ public class CampaignRecyclerViewAdapter extends RecyclerView.Adapter<CampaignRe
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
         public final ImageView mImageView;
@@ -77,6 +78,7 @@ public class CampaignRecyclerViewAdapter extends RecyclerView.Adapter<CampaignRe
             mImageView = binding.itemImage; // Tambahkan ini
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

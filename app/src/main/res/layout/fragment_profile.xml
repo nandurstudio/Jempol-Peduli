@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
-    android:background="@drawable/side_nav_bar"
     android:padding="16dp"
     tools:context=".ui.profile.ProfileFragment">
 
@@ -14,36 +15,38 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:scaleType="centerCrop"
         android:background="@drawable/circle_shape"
         android:contentDescription="@string/profile_picture"
-        android:cropToPadding="true" />
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground" />
 
     <!-- Name with Verified Badge -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nama Pengguna"
-            android:textSize="18sp"
             android:textColor="@android:color/white"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/visibility_off_24px"
-            android:contentDescription="@string/verified_badge" />
+            android:contentDescription="@string/verified_badge"
+            android:src="@drawable/baseline_verified_24"
+            app:tint="@android:color/white"
+            android:tooltipText="Akun ini terverifikasi" />
     </LinearLayout>
 
     <!-- Email -->
@@ -54,57 +57,57 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:text="email@example.com"
-        android:textSize="14sp"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
     <!-- Address -->
     <TextView
         android:id="@+id/profile_address_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
         android:text="Jl. Contoh No. 123, Kota ABC"
-        android:textSize="14sp"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
     <!-- Quotes -->
     <TextView
         android:id="@+id/profile_quote"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
         android:layout_marginBottom="16dp"
-        android:text="This is a placeholder for an inspirational quote."
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
+        android:layout_weight="2"
+        android:background="@android:color/transparent"
         android:gravity="top"
-        android:background="@android:color/transparent" />
+        android:text="This is a placeholder for an inspirational quote."
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
     <!-- Statistics -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/profile_donations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Donations: 55"
-            android:textSize="16sp"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="8dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/profile_received"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Received: 12"
-            android:textSize="16sp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <!-- Address EditText -->
         <EditText
@@ -134,9 +137,9 @@
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:text="Save" />
 
     </LinearLayout>
 
@@ -144,74 +147,78 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:baselineAligned="false"
         android:gravity="center"
+        android:orientation="horizontal"
         android:weightSum="3">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_eye_dark"
-                android:contentDescription="@string/button1" />
+                android:contentDescription="@string/button1"
+                android:src="@drawable/ic_eye_dark" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Button 1"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:gravity="center" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_eye_dark"
-                android:contentDescription="@string/button1" />
+                android:contentDescription="@string/button1"
+                android:src="@drawable/ic_eye_dark" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Button 2"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:gravity="center" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_eye_dark"
-                android:contentDescription="@string/button1" />
+                android:contentDescription="@string/button1"
+                android:src="@drawable/ic_eye_dark" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Button 3"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:gravity="center" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

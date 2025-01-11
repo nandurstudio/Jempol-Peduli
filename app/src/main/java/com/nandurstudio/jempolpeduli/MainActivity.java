@@ -1,6 +1,7 @@
 package com.nandurstudio.jempolpeduli;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 
@@ -27,7 +28,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), LoginActivity.class);
+            Intent intent = new Intent(view.getContext(), OnboardingActivity.class);
             view.getContext().startActivity(intent);
         });
 
@@ -83,23 +83,23 @@ public class MainActivity extends AppCompatActivity {
         navigationBarView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 viewPager.setCurrentItem(0);  // Pindah ke HomeFragment
-                Toast.makeText(this, "Item 1 clicked", Toast.LENGTH_SHORT).show();
+                Log.d("NavigationBar", "Item 1 clicked");
                 return true;
             } else if (item.getItemId() == R.id.nav_donation) {
                 viewPager.setCurrentItem(1);  // Pindah ke DonationFragment
-                Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT).show();
+                Log.d("NavigationBar", "Item 2 clicked");
                 return true;
             } else if (item.getItemId() == R.id.nav_profile) {
                 viewPager.setCurrentItem(2);  // Pindah ke ProfileFragment
-                Toast.makeText(this, "Item 3 clicked", Toast.LENGTH_SHORT).show();
+                Log.d("NavigationBar", "Item 3 clicked");
                 return true;
             } else if (item.getItemId() == R.id.nav_inbox) {
                 viewPager.setCurrentItem(3);  // Pindah ke InboxFragment
-                Toast.makeText(this, "Item 4 clicked", Toast.LENGTH_SHORT).show();
+                Log.d("NavigationBar", "Item 4 clicked");
                 return true;
             } else if (item.getItemId() == R.id.nav_campaign) {
                 viewPager.setCurrentItem(4);  // Pindah ke CampaignFragment
-                Toast.makeText(this, "Item 5 clicked", Toast.LENGTH_SHORT).show();
+                Log.d("NavigationBar", "Item 5 clicked");
                 return true;
             }
             return false;
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 

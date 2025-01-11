@@ -1,7 +1,6 @@
 package com.nandurstudio.jempolpeduli.ui.profile;
 
-import static android.content.ContentValues.TAG;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,13 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String TAG = "ProfileFragment";
     private FragmentProfileBinding binding;
     private ProfileViewModel profileViewModel;
 
@@ -45,9 +45,6 @@ public class ProfileFragment extends Fragment {
         View root = binding.getRoot();
 
         db = FirebaseFirestore.getInstance();
-        if (db == null) {
-            Log.e(TAG, "FirebaseFirestore instance is null!");
-        }
 
         // Load user data
         loadUserData();
@@ -74,6 +71,18 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "No user logged in", Toast.LENGTH_SHORT).show();
         }
 
+        if (firebaseUser != null) {
+            Log.d("FirebaseUser", "UID: " + firebaseUser.getUid());
+            Log.d("FirebaseUser", "DisplayName: " + firebaseUser.getDisplayName());
+            Log.d("FirebaseUser", "Email: " + firebaseUser.getEmail());
+            Log.d("FirebaseUser", "PhoneNumber: " + firebaseUser.getPhoneNumber());
+            Log.d("FirebaseUser", "PhotoUrl: " + (firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : "null"));
+            Log.d("FirebaseUser", "ProviderId: " + firebaseUser.getProviderId());
+            Log.d("FirebaseUser", "IsEmailVerified: " + firebaseUser.isEmailVerified());
+        } else {
+            Log.d("FirebaseUser", "No user is logged in.");
+        }
+
         // Bind data to UI
         final ImageView profileImageView = binding.profilePicture;
         profileViewModel.getPhotoUrl().observe(getViewLifecycleOwner(), photoUrl -> {
@@ -97,18 +106,16 @@ public class ProfileFragment extends Fragment {
         });
 
         // Bind name and email to UI
-        profileViewModel.getName().observe(getViewLifecycleOwner(), name -> {
-            binding.profileName.setText(name);
-        });
+        profileViewModel.getName().observe(getViewLifecycleOwner(), name -> binding.profileName.setText(name));
 
         profileViewModel.getEmail().observe(getViewLifecycleOwner(), email -> {
+
+            Log.d(TAG, "onCreateView: "+email);
             binding.profileEmail.setText(email);
         });
 
         // Save Button to update profile data
-        binding.saveButton.setOnClickListener(v -> {
-            saveProfileDataToFirestore(firebaseUser);
-        });
+        binding.saveButton.setOnClickListener(v -> saveProfileDataToFirestore(firebaseUser));
 
         // Bind user input fields (address, phone, nickname) for editing
         EditText profileAddress = binding.profileAddress;
@@ -132,17 +139,20 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadUserData() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         db.collection("users").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String name = documentSnapshot.getString("name");
+                        String name = documentSnapshot.getString("displayName");
                         String email = documentSnapshot.getString("email");
                         String photoUrl = documentSnapshot.getString("photoUrl");
 
                         // Update UI
                         profileViewModel.setUserData(name, email, photoUrl);
+
+                        // Load donation count
+                        loadDonationCount(userId); // Panggil fungsi untuk mendapatkan jumlah donasi
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -204,6 +214,32 @@ public class ProfileFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     // Tangani kegagalan
                     Log.e("Firestore", "Error updating user profile", e);
+                });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void loadDonationCount(String userId) {
+        // Set placeholder sebelum memulai pengambilan data
+        if (binding != null) {
+            binding.profileDonations.setText("Loading donations...");
+        }
+
+        db.collection("donations")
+                .whereEqualTo("userId", userId) // Sesuaikan dengan field yang sesuai di koleksi "donations"
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (binding != null) {
+                        // Pastikan binding tidak null sebelum memodifikasi UI
+                        int donationCount = querySnapshot != null ? querySnapshot.size() : 0;
+                        binding.profileDonations.setText("Donations: " + donationCount);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    if (binding != null) {
+                        // Tampilkan pesan error jika terjadi kegagalan
+                        binding.profileDonations.setText("Failed to load donations");
+                    }
+                    Log.e(TAG, "Error getting donation count", e);
                 });
     }
 

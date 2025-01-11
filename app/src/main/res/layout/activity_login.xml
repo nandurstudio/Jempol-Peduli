@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     tools:context=".ui.login.LoginActivity">
 
     <!-- Logo or image at the top -->
@@ -13,10 +14,23 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:contentDescription="@string/logo_desc"
-        android:src="@drawable/ic_eye_dark"
+        android:src="@drawable/ic_launcher_thumb_heart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/md_theme_primary"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- CardView containing login form -->
     <androidx.cardview.widget.CardView
@@ -28,7 +42,8 @@
         app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImage">
+        app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
+        app:layout_constraintTop_toBottomOf="@id/appName">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +58,8 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/login"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground" />
 
             <EditText
                 android:id="@+id/username"
@@ -54,9 +70,9 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:minHeight="48dp"
-                android:selectAllOnFocus="true" />
+                android:textColor="?attr/colorOnBackground"
+                app:hintTextColor="?attr/colorOnSurface" />
 
-            <!-- Password field with eye icon for toggling visibility -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,11 +86,10 @@
                     android:hint="@string/password"
                     android:inputType="textPassword"
                     android:minHeight="48dp"
-                    android:paddingEnd="48dp"
-                    android:selectAllOnFocus="true"
-                    tools:ignore="RtlSymmetry" />
+                    app:paddingEnd="48dp"
+                    android:textColor="?attr/colorOnBackground"
+                    app:hintTextColor="?attr/colorOnSurface" />
 
-                <!-- Eye icon to toggle password visibility -->
                 <ImageView
                     android:id="@+id/eyeIcon"
                     android:layout_width="24dp"
@@ -83,7 +98,8 @@
                     android:layout_centerVertical="true"
                     android:contentDescription="@string/show_password"
                     android:padding="1dp"
-                    android:src="@drawable/visibility_24px" />
+                    android:src="@drawable/visibility_24px"
+                    app:tint="?attr/colorOnSurface" />
             </RelativeLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -94,7 +110,8 @@
                 android:textAlignment="center"
                 app:icon="@drawable/mail_24px"
                 app:iconGravity="textStart"
-                app:iconPadding="8dp" />
+                app:iconPadding="8dp"
+                app:backgroundTint="?android:attr/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,4 +170,17 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/appVersionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_version"
+        android:textSize="14sp"
+        android:textColor="@color/md_theme_secondary"
+        app:layout_constraintTop_toBottomOf="@id/loginCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
