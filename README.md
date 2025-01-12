@@ -2,11 +2,11 @@
 © Nandur - 2024 v1.0.0
 
 **Author**: Nandang Duryat (NIM 312310233)  
-**Class**: TI.23.C4
-**Project**: JempolPeduli - UAS
-**Course**: Pemograman Mobile 1 semester 3
+**Class**: TI.23.C4  
+**Project**: JempolPeduli - UAS  
+**Course**: Pemograman Mobile 1 semester 3  
 **Instructor**: Pak Donny Maulana, S.Kom., M.M.S.I.  
-**Institution**: Universitas Pelita Bangsa
+**Institution**: Universitas Pelita Bangsa  
 
 **JempolPeduli** is a mobile application developed to facilitate food and clothing donations, enabling users to give and receive aid with ease. Aiming to enhance social awareness, this app leverages technology to streamline the donation process.
 
